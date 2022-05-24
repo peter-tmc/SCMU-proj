@@ -131,25 +131,44 @@ class _AlarmDetailsState extends State<AlarmDetails> {
                 padding: const EdgeInsets.fromLTRB(
                     OVERALL_LEFT_PADDING, 20.0, 35.0, 0.0),
                 child: Row(
-                  children: [
-                    Text("Time: ", style: TextStyle(fontSize: 20.0)),
-                    _editableAlarmTime()
-                  ],
-                ),
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Text("Time: ", style: TextStyle(fontSize: 20.0)),
+                          _editableAlarmTime()
+                        ],
+                      ),
+                      if (daysOfTheWeek
+                          .where((element) => element == true)
+                          .toList()
+                          .isEmpty)
+                        Row(
+                          children: [
+                            Text("Date: ", style: TextStyle(fontSize: 20.0)),
+                            _editableAlarmDate()
+                          ],
+                        ),
+                    ]),
               ),
+              if (!allDays)
+                Padding(
+                  padding: const EdgeInsets.only(left: DAYSOFTHEWEEK_ALL_PADDING, right: DAYSOFTHEWEEK_ALL_PADDING, top: DAYSOFTHEWEEK_ALL_PADDING),
+                  child: Row(
+                    children: [
+                      _dayOfTheWeekIconButton("M", 0),
+                      _dayOfTheWeekIconButton("T", 1),
+                      _dayOfTheWeekIconButton("W", 2),
+                      _dayOfTheWeekIconButton("T", 3),
+                      _dayOfTheWeekIconButton("F", 4),
+                      _dayOfTheWeekIconButton("S", 5),
+                      _dayOfTheWeekIconButton("S", 6)
+                    ],
+                  ),
+                ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(
-                    OVERALL_LEFT_PADDING, 10.0, 35.0, 8.0),
-                child: Row(
-                  children: [
-                    Text("Date: ", style: TextStyle(fontSize: 20.0)),
-                    _editableAlarmDate()
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                    CHECKBOX_LEFT_PADDING, 5.0, 35.0, 0.0),
+                    CHECKBOX_LEFT_PADDING, 0.0, 35.0, 0.0),
                 child: Row(
                   children: [
                     Checkbox(
@@ -176,22 +195,8 @@ class _AlarmDetailsState extends State<AlarmDetails> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(DAYSOFTHEWEEK_ALL_PADDING),
-                child: Row(
-                  children: [
-                    _dayOfTheWeekIconButton("M", 0),
-                    _dayOfTheWeekIconButton("T", 1),
-                    _dayOfTheWeekIconButton("W", 2),
-                    _dayOfTheWeekIconButton("T", 3),
-                    _dayOfTheWeekIconButton("F", 4),
-                    _dayOfTheWeekIconButton("S", 5),
-                    _dayOfTheWeekIconButton("S", 6)
-                  ],
-                ),
-              ),
-              Padding(
                 padding: const EdgeInsets.fromLTRB(
-                    OVERALL_LEFT_PADDING, 60.0, 8.0, 15.0),
+                    OVERALL_LEFT_PADDING, 20.0, 8.0, 15.0),
                 child: Column(
                   children: [
                     Row(
@@ -234,11 +239,16 @@ class _AlarmDetailsState extends State<AlarmDetails> {
   Widget _dayOfTheWeekIconButton(String initial, int currentDay) {
     return Expanded(
       child: TextButton(
-        style: ButtonStyle(
-          overlayColor: MaterialStateProperty.all(Colors.black12),
-          shape: MaterialStateProperty.all(CircleBorder()),
-          backgroundColor: MaterialStateProperty.all(Colors.indigo[500]),
-        ),
+        style: (daysOfTheWeek[currentDay])
+            ? ButtonStyle(
+                overlayColor: MaterialStateProperty.all(Colors.black12),
+                shape: MaterialStateProperty.all(CircleBorder()),
+                backgroundColor: MaterialStateProperty.all(Colors.indigo[900]),
+              )
+            : ButtonStyle(
+                overlayColor: MaterialStateProperty.all(Colors.black12),
+                shape: MaterialStateProperty.all(CircleBorder()),
+                backgroundColor: MaterialStateProperty.all(Colors.indigo[500])),
         onPressed: () {
           setState(() {
             daysOfTheWeek[currentDay] = !daysOfTheWeek[currentDay];
