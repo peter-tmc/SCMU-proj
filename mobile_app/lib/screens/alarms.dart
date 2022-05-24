@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:mobile_app/configurations/functions.dart';
 import 'package:mobile_app/models/alarm.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mobile_app/screens/alarm-detail.dart';
+import 'package:mobile_app/utils/bluetooth_utils.dart';
 import 'package:mobile_app/widgets/alarm.dart';
 import '../globals.dart' as globals;
+import 'discover.dart';
 
 class Alarms extends StatefulWidget {
   const Alarms({Key? key}) : super(key: key);
@@ -102,7 +105,20 @@ class _State extends State<Alarms> {
                       ),
                     ),
                   ),
-          )
+          ),
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return DiscoveryPage();
+                    },
+                  ),
+                );
+
+              },
+              child: Text("Connect to ESP32 Bluetooth") //Translations.of(mainContext).text("yes")),
+          ),
         ],
       ),
     );

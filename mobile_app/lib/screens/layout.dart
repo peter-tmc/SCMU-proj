@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'alarm-detail.dart';
 import 'alarms.dart';
 import '../globals.dart' as globals;
+import 'bluetooth-page.dart';
 class Layout extends StatefulWidget {
   Layout({Key? key}) : super(key: key);
 
@@ -21,6 +22,7 @@ class _LayoutState extends State<Layout> {
 
   Widget? alarmsScreen;
   Widget? insightsScreen;
+  Widget? bluetoothScreen;
   PageController? _pageController;
   int currentId = 0;
 
@@ -61,6 +63,9 @@ class _LayoutState extends State<Layout> {
 
     insightsScreen = Insights();
     widgets.add(insightsScreen!);
+
+    bluetoothScreen = BluetoothPage();
+    widgets.add(bluetoothScreen!);
 
     return widgets;
   }
@@ -140,6 +145,24 @@ class _LayoutState extends State<Layout> {
                   : Icon(
                       Icons.bed,
                     ),
+              label: ""),
+          BottomNavigationBarItem(
+              icon: currentIndex == 2
+                  ? Container(
+                decoration: BoxDecoration(
+                  color:  Colors.indigo[500],
+                  shape: BoxShape.circle,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Icon(
+                    Icons.bluetooth,
+                  ),
+                ),
+              )
+                  : Icon(
+                Icons.bluetooth,
+              ),
               label: ""),
         ],
       ),
