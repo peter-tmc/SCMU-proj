@@ -33,10 +33,8 @@ class _State extends State<Alarms> {
 
   @override
   Widget build(BuildContext context) {
-    //initializeDateFormatting();
     DateTime now = DateTime.now();
     String hours = DateFormat.H().format(now) + "H" + DateFormat('mm').format(now);
-    //DateFormat.H('h').format(now) + "H" + DateFormat.m('mm').format(now);
     return SafeArea(
       child: Column(
         children: [
