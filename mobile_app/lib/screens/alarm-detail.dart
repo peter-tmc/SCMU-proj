@@ -7,17 +7,17 @@ import '../models/alarm.dart';
 import '../globals.dart' as globals;
 
 class AlarmDetails extends StatefulWidget {
-  const AlarmDetails({Key? key, required this.id, required this.alarm}) : super(key: key);
+  const AlarmDetails({Key? key, required this.id, required this.alarm})
+      : super(key: key);
 
   final int id;
   final Alarm alarm;
+
   @override
   State<AlarmDetails> createState() => _AlarmDetailsState();
-
 }
 
 class _AlarmDetailsState extends State<AlarmDetails> {
-
   /*------------------------------Alarm info------------------------------*/
   /* Name of the alarm */
   late String alarmTitle;
@@ -48,12 +48,16 @@ class _AlarmDetailsState extends State<AlarmDetails> {
 
   @override
   void initState() {
-     alarmTitle = widget.alarm.name.toString();
-     timeOfAlarm = widget.alarm.time;
-     dateOfAlarm = widget.alarm.date;
-     allDays = widget.alarm.everyDay;
-     daysOfTheWeek= widget.alarm.daysOfTheWeek.toList();
-     switchOptions = [widget.alarm.annoyingAlarm, widget.alarm.soundLevel, widget.alarm.useLeds];
+    alarmTitle = widget.alarm.name.toString();
+    timeOfAlarm = widget.alarm.time;
+    dateOfAlarm = widget.alarm.date;
+    allDays = widget.alarm.everyDay;
+    daysOfTheWeek = widget.alarm.daysOfTheWeek.toList();
+    switchOptions = [
+      widget.alarm.annoyingAlarm,
+      widget.alarm.soundLevel,
+      widget.alarm.useLeds
+    ];
     super.initState();
   }
 
@@ -76,18 +80,18 @@ class _AlarmDetailsState extends State<AlarmDetails> {
   /*---------------------------------------------------------------------------*/
 
   /*------------------------------Size Constants-------------------------------*/
-    static const double OVERALL_LEFT_PADDING = 20.0;
-    static const double CHECKBOX_LEFT_PADDING = 5.0;
-    static const double DAYSOFTHEWEEK_ALL_PADDING = 15.0;
+  static const double OVERALL_LEFT_PADDING = 20.0;
+  static const double CHECKBOX_LEFT_PADDING = 5.0;
+  static const double DAYSOFTHEWEEK_ALL_PADDING = 15.0;
 
   /*---------------------------------------------------------------------------*/
-
 
   @override
   Widget build(BuildContext context) {
     //Current Time variables
     DateTime now = DateTime.now();
-    String hours = DateFormat.H().format(now) + "H" + DateFormat('mm').format(now);
+    String hours =
+        DateFormat.H().format(now) + "H" + DateFormat('mm').format(now);
 
     return Material(
       color: Colors.indigo[300],
@@ -97,60 +101,73 @@ class _AlarmDetailsState extends State<AlarmDetails> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(OVERALL_LEFT_PADDING, 20.0, 35.0, 8.0),
+                padding: const EdgeInsets.fromLTRB(
+                    OVERALL_LEFT_PADDING, 20.0, 35.0, 8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(child: _editableAlarmTile()),
                     TextButton(
                         onPressed: () {
-                          Alarm newAlarm = Alarm(alarmId: widget.id.toString(),
-                                                 name: alarmTitle,
-                                                 time: timeOfAlarm,
-                                                 date: dateOfAlarm,
-                                                 annoyingAlarm: switchOptions[0],
-                                                 soundLevel: switchOptions[1],
-                                                 useLeds: switchOptions[2],
-                                                 everyDay: allDays,
-                                                 daysOfTheWeek: daysOfTheWeek
-                                                );
+                          Alarm newAlarm = Alarm(
+                              alarmId: widget.id.toString(),
+                              name: alarmTitle,
+                              time: timeOfAlarm,
+                              date: dateOfAlarm,
+                              annoyingAlarm: switchOptions[0],
+                              soundLevel: switchOptions[1],
+                              useLeds: switchOptions[2],
+                              everyDay: allDays,
+                              daysOfTheWeek: daysOfTheWeek);
                           Navigator.pop(context, newAlarm);
                         },
-                        child: Text('SAVE', style: TextStyle(fontSize: 20.0, color: Colors.black)))
+                        child: Text('SAVE',
+                            style:
+                                TextStyle(fontSize: 20.0, color: Colors.black)))
                   ],
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(OVERALL_LEFT_PADDING, 20.0, 35.0, 0.0),
+                padding: const EdgeInsets.fromLTRB(
+                    OVERALL_LEFT_PADDING, 20.0, 35.0, 0.0),
                 child: Row(
-                  children: [Text("Time: ", style: TextStyle(fontSize: 20.0)), _editableAlarmTime()],
+                  children: [
+                    Text("Time: ", style: TextStyle(fontSize: 20.0)),
+                    _editableAlarmTime()
+                  ],
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(OVERALL_LEFT_PADDING, 10.0, 35.0, 8.0),
+                padding: const EdgeInsets.fromLTRB(
+                    OVERALL_LEFT_PADDING, 10.0, 35.0, 8.0),
                 child: Row(
-                  children: [Text("Date: ", style: TextStyle(fontSize: 20.0)), _editableAlarmDate()],
+                  children: [
+                    Text("Date: ", style: TextStyle(fontSize: 20.0)),
+                    _editableAlarmDate()
+                  ],
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(CHECKBOX_LEFT_PADDING, 5.0, 35.0, 0.0),
+                padding: const EdgeInsets.fromLTRB(
+                    CHECKBOX_LEFT_PADDING, 5.0, 35.0, 0.0),
                 child: Row(
                   children: [
                     Checkbox(
-                        value: allDays,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            allDays = value!;
-                            if (allDays) {
-                              previousState = List.from(daysOfTheWeek);
-                              daysOfTheWeek.setAll(0, [true, true, true, true, true, true, true]);
-                            } else {
-                              daysOfTheWeek = List.from(previousState);
-                            }
-                          });
-                        },
-                    activeColor: Colors.indigo,),
-
+                      value: allDays,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          allDays = value!;
+                          if (allDays) {
+                            previousState = List.from(daysOfTheWeek);
+                            daysOfTheWeek.setAll(
+                                0, [true, true, true, true, true, true, true]);
+                          } else {
+                            daysOfTheWeek = List.from(previousState);
+                          }
+                        });
+                      },
+                      activeColor: Colors.indigo,
+                    ),
                     Text(
                       "Every day",
                       style: TextStyle(fontSize: 20.0),
@@ -173,7 +190,8 @@ class _AlarmDetailsState extends State<AlarmDetails> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(OVERALL_LEFT_PADDING, 60.0, 8.0, 15.0),
+                padding: const EdgeInsets.fromLTRB(
+                    OVERALL_LEFT_PADDING, 60.0, 8.0, 15.0),
                 child: Column(
                   children: [
                     Row(
@@ -187,7 +205,6 @@ class _AlarmDetailsState extends State<AlarmDetails> {
                   ],
                 ),
               ),
-
             ],
           ),
         ),
@@ -240,7 +257,10 @@ class _AlarmDetailsState extends State<AlarmDetails> {
         onTap: () async {
           DateTime newDate = await showDatePicker(
             context: context,
-            initialDate: DateTime(int.parse(dateOfAlarm.split("/")[2]),int.parse(dateOfAlarm.split("/")[1]),int.parse(dateOfAlarm.split("/")[0])),
+            initialDate: DateTime(
+                int.parse(dateOfAlarm.split("/")[2]),
+                int.parse(dateOfAlarm.split("/")[1]),
+                int.parse(dateOfAlarm.split("/")[0])),
             firstDate: DateTime(2022),
             lastDate: DateTime(2025),
           ) as DateTime;
@@ -256,10 +276,16 @@ class _AlarmDetailsState extends State<AlarmDetails> {
         onTap: () async {
           TimeOfDay newTime = await showTimePicker(
             context: context,
-            initialTime: TimeOfDay(hour: int.parse(timeOfAlarm.split(":")[0]), minute: int.parse(timeOfAlarm.split(":")[1])),
+            initialTime: TimeOfDay(
+                hour: int.parse(timeOfAlarm.split(":")[0]),
+                minute: int.parse(timeOfAlarm.split(":")[1])),
           ) as TimeOfDay;
           setState(() {
-            timeOfAlarm = newTime.format(context);
+            timeOfAlarm = DateFormat('H')
+                    .format(DateTime(0, 0, 0, newTime.hour, newTime.minute)) +
+                ":" +
+                DateFormat('mm')
+                    .format(DateTime(0, 0, 0, newTime.hour, newTime.minute));
           });
         },
         child: Text(timeOfAlarm, style: TextStyle(fontSize: 20.0)));
@@ -267,7 +293,8 @@ class _AlarmDetailsState extends State<AlarmDetails> {
 
   //Widget used for editable alarm title
   Widget _editableAlarmTile() {
-    TextEditingController _editingController = TextEditingController(text: alarmTitle);
+    TextEditingController _editingController =
+        TextEditingController(text: alarmTitle);
 
     if (_isEditingText) {
       return Center(
