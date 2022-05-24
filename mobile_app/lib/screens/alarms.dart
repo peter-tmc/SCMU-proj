@@ -34,7 +34,8 @@ class _State extends State<Alarms> {
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
-    String hours = DateFormat.H().format(now) + "H" + DateFormat('mm').format(now);
+    String hours =
+        DateFormat.H().format(now) + "H" + DateFormat('mm').format(now);
     return SafeArea(
       child: Column(
         children: [
@@ -45,8 +46,11 @@ class _State extends State<Alarms> {
               children: [
                 Text(hours,
                     textAlign: TextAlign.left,
-                    style: TextStyle(fontSize: 40, color: Colors.grey.shade800)),
-                const Align(alignment: Alignment.centerRight, child: Icon(Icons.alarm, size: 50)),
+                    style:
+                        TextStyle(fontSize: 40, color: Colors.grey.shade800)),
+                const Align(
+                    alignment: Alignment.centerRight,
+                    child: Icon(Icons.alarm, size: 50)),
               ],
             ),
           ),
@@ -102,7 +106,39 @@ class _State extends State<Alarms> {
                       ),
                     ),
                   ),
-          )
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: FloatingActionButton(
+                onPressed: () async {
+                  String currentTime = DateFormat.H().format(DateTime.now()) +
+                      ":" +
+                      DateFormat('mm').format(DateTime.now());
+                  String currentDate =
+                      DateFormat('dd/MM/yyyy').format(DateTime.now());
+                  //TODO MAKE THIS NO DUMB
+                  Alarm alarm = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AlarmDetails(
+                                id: globals.currentId,
+                                alarm: Alarm(
+                                    alarmId: globals.currentId.toString(),
+                                    time: currentTime,
+                                    date: currentDate),
+                              )));
+                  globals.alarmsList.add(alarm);
+                  setState(() {
+                    globals.currentId++;
+                  });
+                },
+                backgroundColor: Colors.indigo,
+                child: Icon(Icons.add, color: Colors.white, size: 50),
+              ),
+            ),
+          ),
         ],
       ),
     );

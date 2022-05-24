@@ -143,23 +143,6 @@ class _LayoutState extends State<Layout> {
               label: ""),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: ()  async{
-          String currentTime = DateFormat.H().format(DateTime.now()) + ":" + DateFormat('mm').format(DateTime.now());
-          String currentDate =  DateFormat('dd/MM/yyyy').format(DateTime.now());
-          //TODO MAKE THIS NO DUMB
-          Alarm alarm = await Navigator.push(context,  MaterialPageRoute(builder: (context) => AlarmDetails(id: currentId, alarm: Alarm(alarmId: currentId.toString(), time: currentTime, date: currentDate),)));
-          globals.alarmsList.add(alarm);
-          setState(() {
-            currentId++;
-          });
-
-
-        },
-        backgroundColor: Colors.indigo,
-
-        child: Icon(Icons.add, color: Colors.white, size: 50),
-      ),
     );
   }
 }
