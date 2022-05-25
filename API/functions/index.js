@@ -57,16 +57,15 @@ exports.POSTInfo = functions.https.onRequest(async (req, res) => {
     if(ts==null || press==null || light==null || gyro==null){
       res.status(400).send('Bad Request! Parameter missing.');
     }
-    /* let snapShot= await db
+    let snapShot= await db
     .collection('/sleepInfo')
-    .where("ts", "===", ts)
-    .doc(ts)
+    .where("ts", "==", ts)
     .get()
-    //console.log(snapShot)
+    console.log(snapShot)
     if (snapShot != null || snapShot.exists) {
       //console.log("h")
-      res.status(409).send('There is already information for that time period');
-    } */
+      res.status(409).send('There is already information for that timestamp');
+    }
     
     let date = ts.split(" ")[0].split("-")[2];
     console.log(date + " - day")
