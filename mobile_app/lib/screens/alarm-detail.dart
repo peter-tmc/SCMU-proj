@@ -95,144 +95,150 @@ class _AlarmDetailsState extends State<AlarmDetails> {
 
     return Material(
       color: Colors.indigo[700],
-      child: Align(
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(50)),
-            color: Colors.indigo[300],
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.5),
-                spreadRadius: 2,
-                blurRadius: 2,
-                offset: Offset(0, 3), // changes position of shadow
-              ),
-            ],
-          ),
-          width: MediaQuery.of(context).size.width - 20,
-          height: (!allDays)
-              ? MediaQuery.of(context).size.height - 300
-              : MediaQuery.of(context).size.height - 350,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-            child: SafeArea(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                        OVERALL_LEFT_PADDING, 20.0, 35.0, 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(child: _editableAlarmTile()),
-                        TextButton(
-                            onPressed: () {
-                              Alarm newAlarm = Alarm(
-                                  alarmId: widget.id.toString(),
-                                  name: alarmTitle,
-                                  time: timeOfAlarm,
-                                  date: dateOfAlarm,
-                                  annoyingAlarm: switchOptions[0],
-                                  soundLevel: switchOptions[1],
-                                  useLeds: switchOptions[2],
-                                  everyDay: allDays,
-                                  daysOfTheWeek: daysOfTheWeek);
-                              Navigator.pop(context, newAlarm);
-                            },
-                            child: Text('SAVE',
-                                style: TextStyle(
-                                    fontSize: 20.0, color: Colors.black)))
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                        OVERALL_LEFT_PADDING, 20.0, 35.0, 0.0),
-                    child: Row(
+      child: Container(
+        /*decoration: BoxDecoration(
+            image: DecorationImage(
+                fit: BoxFit.fill,
+                image: AssetImage('lib/assets/starry-night.jpg'))),*/
+        child: Align(
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(50)),
+              color: Colors.indigo[300],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 2,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
+            ),
+            width: MediaQuery.of(context).size.width - 20,
+            height: (!allDays)
+                ? MediaQuery.of(context).size.height - 300
+                : MediaQuery.of(context).size.height - 350,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                          OVERALL_LEFT_PADDING, 20.0, 35.0, 8.0),
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: [
-                              Text("Time: ", style: TextStyle(fontSize: 20.0)),
-                              _editableAlarmTime()
-                            ],
-                          ),
-                          if (daysOfTheWeek
-                              .where((element) => element == true)
-                              .toList()
-                              .isEmpty)
-                            Row(
-                              children: [
-                                Text("Date: ",
-                                    style: TextStyle(fontSize: 20.0)),
-                                _editableAlarmDate()
-                              ],
-                            ),
-                        ]),
-                  ),
-                  if (!allDays)
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: DAYSOFTHEWEEK_ALL_PADDING,
-                          right: DAYSOFTHEWEEK_ALL_PADDING,
-                          top: DAYSOFTHEWEEK_ALL_PADDING),
-                      child: Row(
-                        children: [
-                          _dayOfTheWeekIconButton("M", 0),
-                          _dayOfTheWeekIconButton("T", 1),
-                          _dayOfTheWeekIconButton("W", 2),
-                          _dayOfTheWeekIconButton("T", 3),
-                          _dayOfTheWeekIconButton("F", 4),
-                          _dayOfTheWeekIconButton("S", 5),
-                          _dayOfTheWeekIconButton("S", 6)
+                          Expanded(child: _editableAlarmTile()),
+                          TextButton(
+                              onPressed: () {
+                                Alarm newAlarm = Alarm(
+                                    alarmId: widget.id.toString(),
+                                    name: alarmTitle,
+                                    time: timeOfAlarm,
+                                    date: dateOfAlarm,
+                                    annoyingAlarm: switchOptions[0],
+                                    soundLevel: switchOptions[1],
+                                    useLeds: switchOptions[2],
+                                    everyDay: allDays,
+                                    daysOfTheWeek: daysOfTheWeek);
+                                Navigator.pop(context, newAlarm);
+                              },
+                              child: Text('SAVE',
+                                  style: TextStyle(
+                                      fontSize: 20.0, color: Colors.black)))
                         ],
                       ),
                     ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                        CHECKBOX_LEFT_PADDING, 0.0, 35.0, 0.0),
-                    child: Row(
-                      children: [
-                        Checkbox(
-                          value: allDays,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              allDays = value!;
-                              if (allDays) {
-                                previousState = List.from(daysOfTheWeek);
-                                daysOfTheWeek.setAll(0,
-                                    [true, true, true, true, true, true, true]);
-                              } else {
-                                daysOfTheWeek = List.from(previousState);
-                              }
-                            });
-                          },
-                          activeColor: Colors.indigo,
-                        ),
-                        Text(
-                          "Every day",
-                          style: TextStyle(fontSize: 20.0),
-                        )
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                          OVERALL_LEFT_PADDING, 20.0, 35.0, 0.0),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Text("Time: ", style: TextStyle(fontSize: 20.0)),
+                                _editableAlarmTime()
+                              ],
+                            ),
+                            if (daysOfTheWeek
+                                .where((element) => element == true)
+                                .toList()
+                                .isEmpty)
+                              Row(
+                                children: [
+                                  Text("Date: ",
+                                      style: TextStyle(fontSize: 20.0)),
+                                  _editableAlarmDate()
+                                ],
+                              ),
+                          ]),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                        OVERALL_LEFT_PADDING, 20.0, 8.0, 15.0),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: const [
-                            Text("Options:", style: TextStyle(fontSize: 20.0)),
+                    if (!allDays)
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: DAYSOFTHEWEEK_ALL_PADDING,
+                            right: DAYSOFTHEWEEK_ALL_PADDING,
+                            top: DAYSOFTHEWEEK_ALL_PADDING),
+                        child: Row(
+                          children: [
+                            _dayOfTheWeekIconButton("M", 0),
+                            _dayOfTheWeekIconButton("T", 1),
+                            _dayOfTheWeekIconButton("W", 2),
+                            _dayOfTheWeekIconButton("T", 3),
+                            _dayOfTheWeekIconButton("F", 4),
+                            _dayOfTheWeekIconButton("S", 5),
+                            _dayOfTheWeekIconButton("S", 6)
                           ],
                         ),
-                        _switchRow("Annoying alarm", 0),
-                        _switchRow("Leveled sounds", 1),
-                        _switchRow("LEDs", 2)
-                      ],
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                          CHECKBOX_LEFT_PADDING, 0.0, 35.0, 0.0),
+                      child: Row(
+                        children: [
+                          Checkbox(
+                            value: allDays,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                allDays = value!;
+                                if (allDays) {
+                                  previousState = List.from(daysOfTheWeek);
+                                  daysOfTheWeek.setAll(0,
+                                      [true, true, true, true, true, true, true]);
+                                } else {
+                                  daysOfTheWeek = List.from(previousState);
+                                }
+                              });
+                            },
+                            activeColor: Colors.indigo,
+                          ),
+                          Text(
+                            "Every day",
+                            style: TextStyle(fontSize: 20.0),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                          OVERALL_LEFT_PADDING, 20.0, 8.0, 15.0),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: const [
+                              Text("Options:", style: TextStyle(fontSize: 20.0)),
+                            ],
+                          ),
+                          _switchRow("Annoying alarm", 0),
+                          _switchRow("Leveled sounds", 1),
+                          _switchRow("LEDs", 2)
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
