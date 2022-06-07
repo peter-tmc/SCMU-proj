@@ -1,12 +1,28 @@
-#include "time.h"
-#include "BluetoothSerial.h"
-//#include "Clock.h"
-#if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
-#error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
-#endif
+
+#include <WiFi.h>
+
+#include <Firebase_ESP_Client.h>
+#include "addons/TokenHelper.h"
+#include "addons/RTDBHelper.h"
+
+#define WIFI_SSID "AndroidAP_8631"
+#define WIFI_PASS "pedro123"
+
+// Insert Firebase project API Key
+#define API_KEY "AIzaSyA5olWcKmHHPbhxjftCPFJhFUfsLOXDA2Y"
+
+// Insert RTDB URLefine the RTDB URL */
+#define DATABASE_URL "https://scmu-45836-default-rtdb.europe-west1.firebasedatabase.app/" 
+
+
+FirebaseData fbdo;
+FirebaseAuth auth;
+FirebaseConfig configFb;
+
+bool signupOK = false;
 
 const int buzzer = 18; //buzzer to arduino pin 9
-const int pressurePin = 34;
+const int pressurePin = 35;
 const int ledPin = 18;
 const int ledPin2 = 19;
 const int ledPin3 = 21;
@@ -19,42 +35,52 @@ const int photoPin = 27;
 const int buttonPin =  25;
 int photoThreshold = 500; //default
 
-int lightVal;
 int pressVal = 0;
 int nLedsActive = 3;
 int lastPressVal = 0;
 int dutyCycle = 0;
 
+/*IPAddress local_IP(192, 168, 1, 184);
+// Set your Gateway IP address
+IPAddress gateway(192, 168, 66, 127);
+
+IPAddress subnet(255, 255, 255, 0);
+IPAddress primaryDNS(8, 8, 8, 8);   // optional
+IPAddress secondaryDNS(8, 8, 4, 4); // optional
+*/
+
+
 unsigned long previousMillisLEDs = 0; 
 const long intervalLED = 5; 
 unsigned long previousMillisMoreLED = 0;
 const long intervalMoreLEDs = 3000;
+boolean increasingLED = false;
+
 unsigned long previousMillisReadLight = 0;
 const long intervalReadLight = 2000;
-boolean increasingLED = false;
-unsigned long previousMillisBT = 0;
-unsigned long previousMillisBTSensors = 0;
+
+unsigned long previousMillisWifiReconn = 0;
+unsigned long previousMillisWifi = 0; 
+const long intervalWifi = 1000; 
+
+unsigned long previousMillisSensors = 0;
+const long intervalSensors = 1000;
+
+unsigned long previousMillisPushButton = 0;
+const long intervalPushButton = 100;
 
 int buttonState = 0;
-boolean alarmOn = false;
+bool alarmOn = false;
 
-
-BluetoothSerial SerialBT;
 
 void setup(){
   Serial.begin(115200);
-  ledcSetup(ledChannel, freq, resolution);
-  ledcSetup(ledChannel2, freq, resolution);
-  ledcSetup(ledChannel3, freq, resolution);
-  ledcAttachPin(ledPin, ledChannel);
-  ledcAttachPin(ledPin2, ledChannel2);
-  ledcAttachPin(ledPin3, ledChannel3);
+  initLeds();
   pinMode(buttonPin, INPUT);
-  SerialBT.begin();
-  Serial.println("Bluetooth Started! Ready to pair...");
   delay(1000);
   //pinMode(buzzer, OUTPUT); // Set buzzer - pin 9 as an output
-  
+  initWifi();
+  initFirebase();
 }
 
 void loop(){
@@ -73,14 +99,43 @@ void loop(){
   delay(500);*/
   unsigned long currentMillis = millis();
  
-  
-    
-  controlBT(currentMillis);
-  if(alarmOn) controlLight(currentMillis);
+  wifiControl(currentMillis);
+  controlLight(currentMillis);
+  sendSensorInfo(currentMillis);
  /*if(pressVal > 50) esta na cama*/
+  delay(10);
 }
 
+void wifiControl(unsigned long currentMillis) {
+  if ((WiFi.status() != WL_CONNECTED) && (currentMillis - previousMillisWifiReconn >= intervalWifi)) {
+    Serial.print(millis());
+    Serial.println("Reconnecting to WiFi...");
+    WiFi.disconnect();
+    WiFi.reconnect();
+    previousMillisWifiReconn = currentMillis;
+  }
+  /*if(currentMillis - previousMillisWifi >= intervalWifi) {
+   
+    //processing incoming packet, must be called before reading the buffer
+    int packetSize = udp.parsePacket();
+    if (packetSize) {
+      //receive response from server, it will be HELLO WORLD
+      int len = udp.read(incomingPacket, 255);
+      if (len > 0) {
+        incomingPacket[len] = 0;
+      }
+      Serial.printf("UDP packet contents: %s\n", incomingPacket);
+  
+      // send back a reply, to the IP address and port we got the packet from
+      udp.beginPacket(udp.remoteIP(), udp.remotePort());
+      udp.write(replyPacket, sizeof(replyPacket));
+      udp.endPacket();
+      previousMillisWifi = currentMillis;
+    }
+  }*/
+}
 void  controlLight(unsigned long currentMillis) {
+  if(alarmOn) {
    if(currentMillis - previousMillisMoreLED >= intervalMoreLEDs) {
     nLedsActive++;
     previousMillisMoreLED = currentMillis;
@@ -109,65 +164,77 @@ void  controlLight(unsigned long currentMillis) {
     if(nLedsActive > 2) {ledcWrite(ledChannel3, dutyCycle);}
     previousMillisLEDs = currentMillis; 
   }
-  //}
+ }
+ else {
+  ledcWrite(ledChannel, 0); 
+  ledcWrite(ledChannel2, 0);
+  ledcWrite(ledChannel3, 0);
+ }
 }
 
-void controlBT(unsigned long currentMillis) {
-  if(currentMillis - previousMillisBT >= 2) {
-    if (Serial.available())
-    {
-      SerialBT.write(Serial.read());
+void sendSensorInfo(unsigned long currentMillis) {
+  if (Firebase.ready() && signupOK && currentMillis - previousMillisSensors >= intervalSensors) {
+    pressVal = analogRead(pressurePin);
+    Firebase.RTDB.setInt(&fbdo, "sensors/pressure", pressVal);
+    Firebase.RTDB.setInt(&fbdo, "sensors/light", analogRead(photoPin));
+    previousMillisSensors = currentMillis;
+  }
+  
+  if(Firebase.ready() && signupOK && currentMillis - previousMillisPushButton >= intervalPushButton) {
+    if(Firebase.RTDB.getBool(&fbdo, "/alarm/isOn")) {
+      alarmOn = fbdo.to<bool>();
     }
-    if (SerialBT.available())
-    {
-      String msg = SerialBT.readString();
-      if(msg != NULL) {
-        msg.trim();
-        Serial.println(msg);
-        if (msg.equals("sndSensInfo")) {
-          sendSensorInfo();
-        }
-        else if(msg.equals("alarmOn")) {
-          alarmOn = true;
-        }
-        else if(msg.equals("alarmOff")) {
-          alarmOn = false;
-        }
-      }
+    if(alarmOn) {
+      Firebase.RTDB.setInt(&fbdo, "alarm/button", digitalRead(buttonPin));
     }
-    previousMillisBT = currentMillis;
+    previousMillisPushButton = currentMillis;
+  }
+}
+
+void initWifi() {
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
+  Serial.print("Connecting to ");
+  Serial.print(WIFI_SSID);
+  // Loop continuously while WiFi is not connected
+
+  while (WiFi.status() != WL_CONNECTED) {
+    Serial.print('.');
+    delay(1000);
+  }
+   Serial.print("Connected! IP address: ");
+  Serial.println(WiFi.localIP());
+  /*udp.begin(localudpPort);
+  Serial.printf("Now listening at IP %s, UDP port %d\n", WiFi.localIP().toString().c_str(), localudpPort);*/
+}
+
+void initFirebase() {
+    /* Assign the api key (required) */
+  configFb.api_key = API_KEY;
+
+  /* Assign the RTDB URL (required) */
+  configFb.database_url = DATABASE_URL;
+
+  if (Firebase.signUp(&configFb, &auth, "", "")){
+    Serial.println("ok");
+    signupOK = true;
+  }
+  else{
+    Serial.printf("%s\n", configFb.signer.signupError.message.c_str());
   }
 
-  /*if(currentMillis - previousMillisBTSensors >= 10000) {
-    Serial.println("here111111111111");
-    pressVal = analogRead(pressurePin);
-    String txtSendSensors = pressVal + String(",") + analogRead(photoPin);
-    uint8_t buf[txtSendSensors.length()];
-    memcpy(buf, txtSendSensors.c_str(), txtSendSensors.length());
-    
-    //SerialBT.write(buf, txtSendSensors.length());
-    SerialBT.println(txtSendSensors);
-    previousMillisBTSensors = currentMillis;
-    Serial.println("here222222222222222");
-  }*/
-
-  /*if(currentMillis - previousMillisBT >= 2000 && buttonState == HIGH) {
-    String a = "esp32 uwu";
-    uint8_t buf[a.length()];
-    memcpy(buf,a.c_str(),a.length());
-    buttonState = digitalRead(buttonPin);
-    if (SerialBT.available())
-    {
-      SerialBT.write(buf, a.length());
-    }
-  }*/
+  /* Assign the callback function for the long running token generation task */
+  configFb.token_status_callback = tokenStatusCallback; //see addons/TokenHelper.h
+  
+  Firebase.begin(&configFb, &auth);
+  Firebase.reconnectWiFi(true);
 }
 
-void sendSensorInfo() {
-  pressVal = analogRead(pressurePin);
-  String txtSendSensors = pressVal + String(",") + analogRead(photoPin);
-  uint8_t buf[txtSendSensors.length()];
-  memcpy(buf, txtSendSensors.c_str(), txtSendSensors.length());
-  
-  SerialBT.println(txtSendSensors);
+void initLeds() {
+  ledcSetup(ledChannel, freq, resolution);
+  ledcSetup(ledChannel2, freq, resolution);
+  ledcSetup(ledChannel3, freq, resolution);
+  ledcAttachPin(ledPin, ledChannel);
+  ledcAttachPin(ledPin2, ledChannel2);
+  ledcAttachPin(ledPin3, ledChannel3);
 }
