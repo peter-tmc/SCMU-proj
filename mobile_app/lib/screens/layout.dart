@@ -1,15 +1,19 @@
+import 'dart:typed_data';
+
 import 'package:animations/animations.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:mobile_app/models/alarm.dart';
 import 'package:mobile_app/screens/insights.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
-import 'alarm-detail.dart';
 import 'alarms.dart';
+import 'dart:async';
+import 'package:flutter/services.dart';
+import 'package:mobile_app/screens/login.dart';
 import '../globals.dart' as globals;
+
+
+
 class Layout extends StatefulWidget {
-  Layout({Key? key}) : super(key: key);
+  const Layout({Key? key}) : super(key: key);
 
   @override
   _LayoutState createState() => _LayoutState();
@@ -24,10 +28,21 @@ class _LayoutState extends State<Layout> {
   PageController? _pageController;
   int currentId = 0;
 
+
   @override
-  void initState() {
+  void initState(){
     _pageController = PageController(initialPage: currentIndex);
     super.initState();
+    Timer.periodic(Duration(seconds: 5), (timer) async {
+      if(globals.alarmsList.isNotEmpty){
+        List a = globals.alarmsList.toList();
+
+      }
+      /*AudioPlayer player = AudioPlayer();
+      ByteData bytes = await rootBundle.load('assets/audios/sound_alarm.mp3'); //load sound from assets
+      Uint8List  soundbytes = bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
+      player.playBytes(soundbytes);*/
+    });
   }
 
   /*getAlarmsFromCache() async {
@@ -127,7 +142,7 @@ class _LayoutState extends State<Layout> {
               icon: currentIndex == 1
                   ? Container(
                       decoration: BoxDecoration(
-                        color:  Colors.indigo[500],
+                        color: Colors.indigo[500],
                         shape: BoxShape.circle,
                       ),
                       child: Padding(

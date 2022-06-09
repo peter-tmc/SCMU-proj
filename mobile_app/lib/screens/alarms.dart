@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/configurations/functions.dart';
 import 'package:mobile_app/models/alarm.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:mobile_app/screens/alarm-detail.dart';
 import 'package:mobile_app/widgets/alarm.dart';
+import 'package:mobile_app/widgets/customAppBar.dart';
 import '../globals.dart' as globals;
 
 class Alarms extends StatefulWidget {
@@ -39,28 +38,7 @@ class _State extends State<Alarms> {
     return SafeArea(
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20.0, 30.0, 8.0, 0.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(hours,
-                    textAlign: TextAlign.left,
-                    style:
-                        TextStyle(fontSize: 40, color: Colors.grey.shade800)),
-                const Align(
-                    alignment: Alignment.centerRight,
-                    child: Icon(Icons.alarm, size: 50)),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0.0, 0.0, 60.0, 20.0),
-            child: Divider(
-              thickness: 3,
-              color: Colors.grey.shade600,
-            ),
-          ),
+          CustomAppBar(),
           Expanded(
             child: alarmsList.isNotEmpty
                 ? ListView.builder(
@@ -118,7 +96,7 @@ class _State extends State<Alarms> {
                       DateFormat('mm').format(DateTime.now());
                   String currentDate =
                       DateFormat('dd/MM/yyyy').format(DateTime.now());
-                  //TODO MAKE THIS NO DUMB
+                  //TODO MAKE THIS NOT DUMB
                   Alarm alarm = await Navigator.push(
                       context,
                       MaterialPageRoute(

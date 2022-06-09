@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import '../models/alarm.dart';
 import '../globals.dart' as globals;
 
@@ -158,7 +157,8 @@ class _AlarmDetailsState extends State<AlarmDetails> {
                           children: [
                             Row(
                               children: [
-                                Text("Time: ", style: TextStyle(fontSize: 20.0)),
+                                Text("Time: ",
+                                    style: TextStyle(fontSize: 20.0)),
                                 _editableAlarmTime()
                               ],
                             ),
@@ -205,8 +205,15 @@ class _AlarmDetailsState extends State<AlarmDetails> {
                                 allDays = value!;
                                 if (allDays) {
                                   previousState = List.from(daysOfTheWeek);
-                                  daysOfTheWeek.setAll(0,
-                                      [true, true, true, true, true, true, true]);
+                                  daysOfTheWeek.setAll(0, [
+                                    true,
+                                    true,
+                                    true,
+                                    true,
+                                    true,
+                                    true,
+                                    true
+                                  ]);
                                 } else {
                                   daysOfTheWeek = List.from(previousState);
                                 }
@@ -228,7 +235,8 @@ class _AlarmDetailsState extends State<AlarmDetails> {
                         children: [
                           Row(
                             children: const [
-                              Text("Options:", style: TextStyle(fontSize: 20.0)),
+                              Text("Options:",
+                                  style: TextStyle(fontSize: 20.0)),
                             ],
                           ),
                           _switchRow("Annoying alarm", 0),
@@ -282,7 +290,7 @@ class _AlarmDetailsState extends State<AlarmDetails> {
         onPressed: () {
           setState(() {
             daysOfTheWeek[currentDay] = !daysOfTheWeek[currentDay];
-            if(daysOfTheWeek.where((element) => element == false).isEmpty){
+            if (daysOfTheWeek.where((element) => element == false).isEmpty) {
               allDays = true;
             }
           });
@@ -353,14 +361,15 @@ class _AlarmDetailsState extends State<AlarmDetails> {
       ));
     }
     return InkWell(
-        onTap: () {
-          setState(() {
-            _isEditingText = true;
-          });
-        },
-        child: Text(
-          alarmTitle,
-          style: TextStyle(fontSize: 30),
-        ));
+      onTap: () {
+        setState(() {
+          _isEditingText = true;
+        });
+      },
+      child: Text(
+        alarmTitle,
+        style: TextStyle(fontSize: 30),
+      ),
+    );
   }
 }

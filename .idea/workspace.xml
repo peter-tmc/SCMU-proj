@@ -5,8 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e289813b-a6e8-402f-8280-4d7365fffb51" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/mobile_app/assets/audios/sound_alarm.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mobile_app/lib/screens/login.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mobile_app/lib/widgets/customAppBar.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile_app/lib/assets/starry-night.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/mobile_app/assets/images/starry-night.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile_app/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/mobile_app/lib/main.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mobile_app/lib/screens/alarm-detail.dart" beforeDir="false" afterPath="$PROJECT_DIR$/mobile_app/lib/screens/alarm-detail.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile_app/lib/screens/alarms.dart" beforeDir="false" afterPath="$PROJECT_DIR$/mobile_app/lib/screens/alarms.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile_app/lib/screens/insights.dart" beforeDir="false" afterPath="$PROJECT_DIR$/mobile_app/lib/screens/insights.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile_app/lib/screens/layout.dart" beforeDir="false" afterPath="$PROJECT_DIR$/mobile_app/lib/screens/layout.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile_app/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/mobile_app/pubspec.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mobile_app/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/mobile_app/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -18,11 +28,15 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="29cR1wA4vwsBayuh0Tckn8Dr6Nj" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
@@ -35,6 +49,13 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="flutter.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\jpareis\Desktop\SCMU-proj\mobile_app" />
+      <recent name="C:\Users\jpareis\Desktop\SCMU-proj\mobile_app\lib\assets\images" />
+      <recent name="C:\Users\jpareis\Desktop\SCMU-proj\mobile_app\lib\assets\audio" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter" temporary="true" nameIsGenerated="true">
@@ -69,5 +90,8 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
 </project>
